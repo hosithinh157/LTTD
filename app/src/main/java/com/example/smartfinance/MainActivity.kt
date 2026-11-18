@@ -1,42 +1,106 @@
 package com.example.smartfinance
 
 import android.os.Bundle
-import android.util.Log
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.smartfinance.adapters.TransactionAdapter
 import com.example.smartfinance.database.AppDatabase
 import com.example.smartfinance.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
+
+    private var isBalanceVisible = true
+    private var currentBalanceText = "0 đ"
+    private lateinit var adapter: TransactionAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val db = AppDatabase.getInstance(this)
-        val dao = db.smartFinanceDao()
+        val tvGreeting = findViewById<TextView>(R.id.tvGreeting)
+        val tvAvailableBalance = findViewById<TextView>(R.id.tvAvailableBalance)
+        val ivToggleBalance = findViewById<ImageView>(R.id.ivToggleBalance)
+        val tvTotalIncome = findViewById<TextView>(R.id.tvTotalIncome)
+        val tvTotalExpense = findViewById<TextView>(R.id.tvTotalExpense)
+        val tvBudgetPercent = findViewById<TextView>(R.id.tvBudgetPercent)
+        val progressBudget = findViewById<ProgressBar>(R.id.progressBudget)
+        val tvBudgetSpent = findViewById<TextView>(R.id.tvBudgetSpent)
+        val tvBudgetRemaining = findViewById<TextView>(R.id.tvBudgetRemaining)
+        val rvRecentTransactions = findViewById<RecyclerView>(R.id.rvRecentTransactions)
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            // 1. Tạo dữ liệu mẫu nếu bảng Transactions đang trống
-            if (dao.getAllTransactions().isEmpty()) {
-                val userId = dao.insertUser(User(name = "Mai Anh", email = "maianh@email.com", passwordHash = "123456", createdAt = "2026-11-01")).toInt()
-                val walletId = dao.insertWallet(Wallet(userId = userId, name = "Vietcombank", iconName = "ic_bank", balance = 18000000.0)).toInt()
-                val catIncomeId = dao.insertCategory(Category(name = "Lương", type = "INCOME", iconName = "ic_salary")).toInt()
-                val catFoodId = dao.insertCategory(Category(name = "Ăn uống", type = "EXPENSE", iconName = "ic_food")).toInt()
+        // Cấu hình RecyclerView
+        adapter = TransactionAdapter(emptyList())
+        rvRecentTransactions.layoutManager = LinearLayoutManager(this)
+        rvRecentTransactions.adapter = adapter
 
-                dao.insertTransaction(Transaction(userId = userId, walletId = walletId, categoryId = catIncomeId, amount = 15000000.0, type = "INCOME", note = "Lương tháng 11", transactionDate = "2026-11-05", transactionTime = "09:00"))
-                dao.insertTransaction(Transaction(userId = userId, walletId = walletId, categoryId = catFoodId, amount = 12750000.0, type = "EXPENSE", note = "Ăn uống & Mua sắm", transactionDate = "2026-11-15", transactionTime = "12:30"))
-            }
-
-            // 2. Tính tỷ lệ cảnh báo mất cân bằng thu chi tháng 11/2026
-            val totalIncome = dao.getTotalByMonth("INCOME", "2026-11")
-            val totalExpense = dao.getTotalByMonth("EXPENSE", "2026-11")
-
-            if (totalIncome > 0) {
-                val ratio = (totalExpense / totalIncome) * 100
-                Log.d("SmartFinanceDB", "Tỷ lệ chi/thu: $ratio%") // Kết quả: 85.0%
+        // Nút ẩn/hiện số dư khả dụng
+        ivToggleBalance.setOnClickListener {
+            isBalanceVisible = !isBalanceVisible
+            if (isBalanceVisible) {
+                tvAvailableBalance.text = currentBalanceText
+                ivToggleBalance.setImageResource(R.drawable.ic_eye_open)
+            } else {
+                tvAvailableBalance.text = "•••••••• đ"
+                ivToggleBalance.setImageResource(R.drawable.ic_eye_off)
             }
         }
+
+        val dao = AppDatabase.getInstance(this).smartFinanceDao()
+        val targetMonth = "2026-11"
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val loggedInUserId = intent.getIntExtra("USER_ID", -1)
+            val user = if (loggedInUserId != -1) dao.getUserById(loggedInUserId) else dao.getFirstUser()
+            val totalIncome = dao.getTotalByMonth("INCOME", targetMonth)
+            val totalExpense = dao.getTotalByMonth("EXPENSE", targetMonth)
+            val totalBudget = dao.getTotalBudgetByMonth(targetMonth).let { if (it > 0) it else 12000000.0 }
+            val recentList = dao.getRecentTransactionsWithCategory()
+
+            val availableBalance = totalIncome - totalExpense
+            val remainingBudget = (totalBudget - totalExpense).coerceAtLeast(0.0)
+            val budgetPercent = ((totalExpense / totalBudget) * 100).coerceIn(0.0, 100.0)
+
+            // 3. Cập nhật lên giao diện (Main Thread)
+            withContext(Dispatchers.Main) {
+                tvGreeting.text = "Chào ${user?.name ?: "Mai Anh"} 👋"
+                currentBalanceText = "${formatCurrency(availableBalance)} đ"
+                tvAvailableBalance.text = currentBalanceText
+
+                tvTotalIncome.text = "↓  +${formatCurrency(totalIncome)} đ"
+                tvTotalExpense.text = "↑  -${formatCurrency(totalExpense)} đ"
+
+                val percentRounded = String.format(Locale.US, "%.1f%%", budgetPercent)
+                tvBudgetPercent.text = percentRounded
+                progressBudget.progress = budgetPercent.toInt()
+                tvBudgetSpent.text = "Đã chi: ${formatCurrency(totalExpense)} đ"
+                tvBudgetRemaining.text = "Còn lại: ${formatCurrency(remainingBudget)} đ"
+
+                adapter.updateData(recentList)
+            }
+        }
+
+        // Sự kiện demo cho nút Thêm (+)
+        findViewById<android.view.View>(R.id.fabAddTransaction).setOnClickListener {
+            Toast.makeText(this, "Mở màn hình Ghi chép giao dịch", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun formatCurrency(amount: Double): String {
+        val symbols = DecimalFormatSymbols(Locale("vi", "VN")).apply {
+            groupingSeparator = '.'
+        }
+        return DecimalFormat("#,###", symbols).format(amount)
     }
 }
