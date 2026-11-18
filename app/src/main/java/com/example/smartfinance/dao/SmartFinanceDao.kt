@@ -60,8 +60,18 @@ interface SmartFinanceDao {
     SELECT t.transactionId, t.amount, t.type, t.note, t.transactionDate, t.transactionTime, c.name AS categoryName 
     FROM Transactions t 
     INNER JOIN Categories c ON t.categoryId = c.categoryId 
-    ORDER BY t.transactionDate DESC, t.transactionTime DESC 
+    ORDER BY t.transactionId DESC 
     LIMIT 10
     """)
     suspend fun getRecentTransactionsWithCategory(): List<TransactionWithCategory>
+
+    // Thêm vào interface SmartFinanceDao:
+    @Query("SELECT * FROM Wallets WHERE userId = :userId")
+    suspend fun getWalletsByUser(userId: Int): List<Wallet>
+
+    @Query("SELECT * FROM Categories WHERE name = :name AND type = :type LIMIT 1")
+    suspend fun getCategoryByNameAndType(name: String, type: String): Category?
+
+    @Query("UPDATE Wallets SET balance = balance + :delta WHERE walletId = :walletId")
+    suspend fun updateWalletBalance(walletId: Int, delta: Double)
 }
