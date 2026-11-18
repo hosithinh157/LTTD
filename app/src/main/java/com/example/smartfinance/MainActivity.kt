@@ -56,6 +56,13 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.fabAddTransaction).setOnClickListener {
             startActivity(Intent(this, AddTransactionActivity::class.java))
         }
+
+        findViewById<View>(R.id.tvSeeAllTransactions).setOnClickListener {
+            startActivity(Intent(this, HistoryActivity::class.java))
+        }
+        findViewById<View>(R.id.navHistory).setOnClickListener {
+            startActivity(Intent(this, HistoryActivity::class.java))
+        }
     }
 
     override fun onResume() {

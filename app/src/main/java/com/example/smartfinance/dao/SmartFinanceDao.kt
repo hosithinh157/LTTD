@@ -13,6 +13,16 @@ data class TransactionWithCategory(
     val transactionTime: String,
     val categoryName: String
 )
+data class TransactionHistoryItem(
+    val transactionId: Int,
+    val amount: Double,
+    val type: String,
+    val note: String,
+    val transactionDate: String,
+    val transactionTime: String,
+    val categoryName: String,
+    val walletName: String
+)
 @Dao
 interface SmartFinanceDao {
     @Insert
@@ -74,4 +84,31 @@ interface SmartFinanceDao {
 
     @Query("UPDATE Wallets SET balance = balance + :delta WHERE walletId = :walletId")
     suspend fun updateWalletBalance(walletId: Int, delta: Double)
+
+    @Query("""
+    SELECT t.transactionId, t.amount, t.type, t.note, t.transactionDate, t.transactionTime,
+           c.name AS categoryName, w.name AS walletName
+    FROM Transactions t
+    INNER JOIN Categories c ON t.categoryId = c.categoryId
+    INNER JOIN Wallets w ON t.walletId = w.walletId
+    ORDER BY t.transactionDate DESC, t.transactionId DESC
+""")
+    suspend fun getAllTransactionsHistory(): List<TransactionHistoryItem>
+
+    @Query("SELECT * FROM Transactions WHERE transactionId = :id LIMIT 1")
+    suspend fun getTransactionById(id: Int): Transaction?
+
+    @Query("""
+    SELECT t.transactionId, t.amount, t.type, t.note, t.transactionDate, t.transactionTime,
+           c.name AS categoryName, w.name AS walletName
+    FROM Transactions t
+    INNER JOIN Categories c ON t.categoryId = c.categoryId
+    INNER JOIN Wallets w ON t.walletId = w.walletId
+    WHERE t.transactionId = :id
+    LIMIT 1
+""")
+    suspend fun getTransactionDetailById(id: Int): TransactionHistoryItem?
+
+    @Query("DELETE FROM Transactions WHERE transactionId = :id")
+    suspend fun deleteTransactionById(id: Int)
 }
