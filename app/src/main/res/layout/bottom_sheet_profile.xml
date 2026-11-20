@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Cập nhật hồ sơ"
+        android:textColor="#0F172A"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:text="Tên hiển thị"
+        android:textColor="#475569"
+        android:textSize="13sp" />
+
+    <EditText
+        android:id="@+id/edtProfileName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_input_field"
+        android:paddingHorizontal="14dp"
+        android:textColor="#0F172A"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:text="Mật khẩu mới (Để trống nếu không đổi)"
+        android:textColor="#475569"
+        android:textSize="13sp" />
+
+    <EditText
+        android:id="@+id/edtProfilePassword"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/bg_input_field"
+        android:hint="••••••••"
+        android:inputType="textPassword"
+        android:paddingHorizontal="14dp"
+        android:textColor="#0F172A"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancelProfile"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="#EFF3F8"
+            android:text="Hủy"
+            android:textColor="#334155" />
+
+        <Button
+            android:id="@+id/btnSaveProfile"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="2"
+            android:backgroundTint="#066843"
+            android:text="Lưu thay đổi"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</LinearLayout>

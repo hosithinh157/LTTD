@@ -21,15 +21,21 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+import com.example.smartfinance.utils.NavigationUtils
+
 class MainActivity : AppCompatActivity() {
 
     private var isBalanceVisible = true
     private var currentBalanceText = "0 đ"
     private lateinit var adapter: TransactionAdapter
+    private var currentUserId = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        currentUserId = intent.getIntExtra("USER_ID", -1)
+        NavigationUtils.setupNavigation(this, currentUserId, "HOME")
 
         val tvAvailableBalance = findViewById<TextView>(R.id.tvAvailableBalance)
         val ivToggleBalance = findViewById<ImageView>(R.id.ivToggleBalance)
@@ -52,16 +58,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Mở màn hình Ghi chép giao dịch khi bấm nút +
-        findViewById<View>(R.id.fabAddTransaction).setOnClickListener {
-            startActivity(Intent(this, AddTransactionActivity::class.java))
-        }
-
         findViewById<View>(R.id.tvSeeAllTransactions).setOnClickListener {
-            startActivity(Intent(this, HistoryActivity::class.java))
-        }
-        findViewById<View>(R.id.navHistory).setOnClickListener {
-            startActivity(Intent(this, HistoryActivity::class.java))
+            val intent = Intent(this, HistoryActivity::class.java)
+            intent.putExtra("USER_ID", currentUserId)
+            startActivity(intent)
         }
     }
 

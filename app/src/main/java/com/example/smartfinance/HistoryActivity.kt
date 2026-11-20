@@ -27,16 +27,21 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.text.SimpleDateFormat
+import com.example.smartfinance.utils.NavigationUtils
 class HistoryActivity : AppCompatActivity() {
 
     private lateinit var groupAdapter: HistoryGroupAdapter
     private var allTransactions: List<TransactionHistoryItem> = emptyList()
     private var currentFilterType = "ALL" // "ALL", "EXPENSE", "INCOME"
     private var currentKeyword = ""
+    private var currentUserId = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
+        
+        currentUserId = intent.getIntExtra("USER_ID", -1)
+        NavigationUtils.setupNavigation(this, currentUserId, "HISTORY")
 
         val rvHistoryGroups = findViewById<RecyclerView>(R.id.rvHistoryGroups)
         val edtSearch = findViewById<EditText>(R.id.edtSearchHistory)
@@ -84,16 +89,6 @@ class HistoryActivity : AppCompatActivity() {
             currentFilterType = "INCOME"
             updateFilterUI(filterIncome)
             applyFilterAndSearch()
-        }
-
-        // Nút thêm giao dịch (+) ngay trên màn hình Lịch sử
-        findViewById<View>(R.id.fabAddFromHistory).setOnClickListener {
-            startActivity(Intent(this, AddTransactionActivity::class.java))
-        }
-
-        // Quay về Trang chủ
-        findViewById<View>(R.id.navHomeFromHistory).setOnClickListener {
-            finish()
         }
     }
 

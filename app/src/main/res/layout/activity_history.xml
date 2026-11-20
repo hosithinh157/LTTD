@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomNavHistory"
+        android:layout_above="@+id/bottomNavContainer"
         android:orientation="vertical"
         android:paddingHorizontal="18dp"
         android:paddingTop="14dp">
@@ -59,6 +59,7 @@
                 app:tint="#0F172A" />
 
             <ImageView
+                android:id="@+id/ivProfile"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:background="@drawable/bg_circle_soft"
@@ -236,88 +237,6 @@
 
     </LinearLayout>
 
-    <!-- 6. Thanh Bottom Navigation (Tab Lịch sử đang được tô xanh) -->
-    <RelativeLayout
-        android:id="@+id/bottomNavHistory"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_alignParentBottom="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_alignParentBottom="true"
-            android:background="#FFFFFF"
-            android:elevation="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/navHomeFromHistory"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="🏠\nTrang chủ"
-                android:textColor="#64748B"
-                android:textSize="11sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="🧾\nLịch sử"
-                android:textColor="#066843"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/navBudgetFromHistory"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="🐷\nNgân sách"
-                android:textColor="#64748B"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/navReportFromHistory"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="◔\nBáo cáo"
-                android:textColor="#64748B"
-                android:textSize="11sp" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/fabAddFromHistory"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/bg_circle_soft"
-            android:backgroundTint="#FFFFFF"
-            android:clickable="true"
-            android:elevation="10dp"
-            android:focusable="true">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="+"
-                android:textColor="#0F172A"
-                android:textSize="26sp"
-                android:textStyle="bold" />
-        </FrameLayout>
-    </RelativeLayout>
+    <include layout="@layout/layout_bottom_nav" />
 
 </RelativeLayout>

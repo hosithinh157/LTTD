@@ -1,8 +1,10 @@
 package com.example.smartfinance.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.smartfinance.models.*
 data class TransactionWithCategory(
     val transactionId: Int,
@@ -22,6 +24,12 @@ data class TransactionHistoryItem(
     val transactionTime: String,
     val categoryName: String,
     val walletName: String
+)
+
+data class CategoryExpenseResult(
+    val categoryName: String,
+    val iconName: String,
+    val totalAmount: Double
 )
 @Dao
 interface SmartFinanceDao {
@@ -111,4 +119,40 @@ interface SmartFinanceDao {
 
     @Query("DELETE FROM Transactions WHERE transactionId = :id")
     suspend fun deleteTransactionById(id: Int)
+
+    // --- Các truy vấn phục vụ Thống kê & Ngân sách (Thêm mới) ---
+    
+    @Query("SELECT IFNULL(SUM(amount), 0.0) FROM Transactions WHERE userId = :userId AND type = :type AND strftime('%Y-%m', transactionDate) = :month")
+    suspend fun getTotalByMonthAndUser(userId: Int, type: String, month: String): Double
+
+    @Query("""
+        SELECT c.name AS categoryName, c.iconName, SUM(t.amount) AS totalAmount 
+        FROM Transactions t 
+        INNER JOIN Categories c ON t.categoryId = c.categoryId 
+        WHERE t.userId = :userId AND t.type = 'EXPENSE' AND strftime('%Y-%m', t.transactionDate) = :month 
+        GROUP BY c.categoryId 
+        ORDER BY totalAmount DESC
+    """)
+    suspend fun getExpenseGroupedByCategory(userId: Int, month: String): List<CategoryExpenseResult>
+
+    @Query("SELECT * FROM Budgets WHERE userId = :userId AND month = :month")
+    suspend fun getBudgetsByUserAndMonth(userId: Int, month: String): List<Budget>
+
+    @Update
+    suspend fun updateBudget(budget: Budget)
+
+    @Delete
+    suspend fun deleteBudget(budget: Budget)
+
+    @Update
+    suspend fun updateWallet(wallet: Wallet)
+
+    @Query("SELECT * FROM Categories WHERE categoryId = :id LIMIT 1")
+    suspend fun getCategoryById(id: Int): Category?
+
+    @Query("DELETE FROM Wallets WHERE walletId = :id")
+    suspend fun deleteWallet(id: Int)
+
+    @Update
+    suspend fun updateUser(user: User)
 }

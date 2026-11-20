@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tvBudgetSheetTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đặt hạn mức ngân sách"
+        android:textColor="#0F172A"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn danh mục"
+        android:textColor="#475569"
+        android:textSize="13sp"
+        android:layout_marginBottom="6dp" />
+
+    <Spinner
+        android:id="@+id/spinnerBudgetCategory"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_input_field"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hạn mức chi tiêu (VNĐ)"
+        android:textColor="#475569"
+        android:textSize="13sp"
+        android:layout_marginBottom="6dp" />
+
+    <EditText
+        android:id="@+id/edtBudgetLimit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_input_field"
+        android:paddingHorizontal="14dp"
+        android:hint="VD: 5000000"
+        android:inputType="number"
+        android:textColor="#0F172A"
+        android:textSize="15sp"
+        android:layout_marginBottom="24dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnDeleteBudget"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="#FEE2E2"
+            android:text="Xóa"
+            android:textColor="#B91C1C"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnSaveBudget"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="2"
+            android:backgroundTint="#066843"
+            android:text="Lưu ngân sách"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</LinearLayout>
