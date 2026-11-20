@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="HÔM NAY"
-            android:textColor="#0F172A"
+            android:textColor="@color/text_primary"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -29,12 +29,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-125.000 đ"
-            android:textColor="#334155"
+            android:textColor="@color/text_body"
             android:textSize="12sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Thẻ trắng bo góc chứa danh sách giao dịch trong ngày -->
+    <!-- Thẻ bo góc chứa danh sách giao dịch trong ngày -->
     <LinearLayout
         android:id="@+id/containerDayTransactions"
         android:layout_width="match_parent"

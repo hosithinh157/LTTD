@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8FAFC">
+    android:background="@color/bg_screen">
 
-    <!-- Header tương tự MainActivity -->
+    <!-- 1. Top App Bar đồng bộ với toàn bộ ứng dụng -->
     <LinearLayout
         android:id="@+id/headerProfile"
         android:layout_width="match_parent"
@@ -13,54 +13,65 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="18dp"
-        android:paddingTop="14dp"
-        android:paddingBottom="14dp">
+        android:paddingVertical="14dp">
 
         <ImageView
             android:id="@+id/ivBackProfile"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="8dp"
             android:clickable="true"
             android:focusable="true"
+            android:padding="2dp"
             android:src="@android:drawable/ic_media_previous"
-            app:tint="#0F172A" />
+            app:tint="@color/text_primary" />
 
         <FrameLayout
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="14dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="@drawable/bg_logo_green">
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_gravity="center"
                 android:src="@android:drawable/ic_menu_agenda"
                 app:tint="#FFFFFF" />
         </FrameLayout>
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_weight="1"
             android:text="SmartFinance"
-            android:textColor="#0F172A"
+            android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="/ Cá nhân"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginEnd="14dp"
             android:src="@android:drawable/ic_popup_reminder"
-            app:tint="#0F172A" />
+            app:tint="@color/text_primary" />
     </LinearLayout>
 
+    <!-- 2. Nội dung cuộn chính -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/headerProfile"
+        android:clipToPadding="false"
         android:fillViewport="true">
 
         <LinearLayout
@@ -74,8 +85,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="18dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -89,15 +100,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Cài đặt &amp; Cá nhân"
-                        android:textColor="#0F172A"
+                        android:textColor="@color/text_primary"
                         android:textSize="22sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:text="Tùy biến tài khoản và trải nghiệm quản lý chi tiêu"
-                        android:textColor="#64748B"
+                        android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -105,19 +117,19 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@android:drawable/ic_menu_help"
-                    app:tint="#94A3B8" />
+                    app:tint="@color/text_hint" />
             </LinearLayout>
 
             <!-- 1. Profile Card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/bg_card_white"
                 android:elevation="2dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="16dp"
-                android:layout_marginBottom="20dp">
+                android:padding="16dp">
 
                 <FrameLayout
                     android:layout_width="56dp"
@@ -127,7 +139,7 @@
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:background="@drawable/bg_circle_soft"
-                        android:backgroundTint="#E2E8F0"
+                        android:backgroundTint="@color/border_subtle"
                         android:padding="12dp"
                         android:src="@drawable/ic_person" />
 
@@ -159,7 +171,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Mai Anh"
-                            android:textColor="#0F172A"
+                            android:textColor="@color/text_primary"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -181,7 +193,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="test@email.com"
-                        android:textColor="#475569"
+                        android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -202,23 +214,24 @@
                     android:focusable="true"
                     android:padding="4dp"
                     android:src="@android:drawable/ic_menu_edit"
-                    app:tint="#64748B" />
+                    app:tint="@color/text_secondary" />
             </LinearLayout>
 
             <!-- 2. Giao diện & Định dạng -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:letterSpacing="0.03"
                     android:text="GIAO DIỆN &amp; ĐỊNH DẠNG"
-                    android:textColor="#64748B"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -226,18 +239,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Material You"
-                    android:textColor="#94A3B8"
+                    android:textColor="@color/text_hint"
                     android:textSize="11sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:background="@drawable/bg_card_white"
                 android:elevation="2dp"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:layout_marginBottom="24dp">
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -250,7 +263,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Chế độ hiển thị"
-                        android:textColor="#0F172A"
+                        android:textColor="@color/text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -259,7 +272,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Giao diện Sáng "
-                        android:textColor="#475569"
+                        android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -267,7 +280,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginVertical="12dp"
-                    android:background="#EEF2F6" />
+                    android:background="@color/divider_line" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -280,18 +293,20 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Đơn vị tiền tệ"
-                            android:textColor="#0F172A"
+                            android:textColor="@color/text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Quy chuẩn tính toán số dư"
-                            android:textColor="#64748B"
+                            android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -314,7 +329,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginVertical="12dp"
-                    android:background="#EEF2F6" />
+                    android:background="@color/divider_line" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -327,18 +342,20 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ngôn ngữ"
-                            android:textColor="#0F172A"
+                            android:textColor="@color/text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Khu vực Việt Nam"
-                            android:textColor="#64748B"
+                            android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -346,7 +363,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Tiếng Việt"
-                        android:textColor="#0F172A"
+                        android:textColor="@color/text_primary"
                         android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -355,16 +372,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:letterSpacing="0.03"
                     android:text="TIỆN ÍCH &amp; THÔNG MINH"
-                    android:textColor="#64748B"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -372,18 +390,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tự động hóa"
-                    android:textColor="#94A3B8"
+                    android:textColor="@color/text_hint"
                     android:textSize="11sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:background="@drawable/bg_card_white"
                 android:elevation="2dp"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:layout_marginBottom="24dp">
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -396,16 +414,18 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Nhắc nhở ghi chép"
-                            android:textColor="#0F172A"
+                            android:textColor="@color/text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <TextView
                             android:id="@+id/tvReminderTime"
                             android:layout_width="wrap_content"
@@ -426,7 +446,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginVertical="12dp"
-                    android:background="#EEF2F6" />
+                    android:background="@color/divider_line" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -439,18 +459,20 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Khóa &amp; Bảo mật ví"
-                            android:textColor="#0F172A"
+                            android:textColor="@color/text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Sinh trắc học FaceID &amp; Mã PIN"
-                            android:textColor="#64748B"
+                            android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -458,19 +480,19 @@
                         android:id="@+id/tvSecurityLock"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:text="Đang bật >"
                         android:textColor="#066843"
                         android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:clickable="true"
-                        android:focusable="true" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginVertical="12dp"
-                    android:background="#EEF2F6" />
+                    android:background="@color/divider_line" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -483,18 +505,20 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Xuất báo cáo chi tiêu"
-                            android:textColor="#0F172A"
+                            android:textColor="@color/text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Hỗ trợ Excel, CSV, PDF sao kê"
-                            android:textColor="#64748B"
+                            android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -518,12 +542,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:background="@drawable/bg_card_white"
                 android:elevation="2dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="16dp"
-                android:layout_marginBottom="24dp">
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -542,7 +566,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Lưu trữ Room DB Offline"
-                        android:textColor="#0F172A"
+                        android:textColor="@color/text_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -550,31 +574,33 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Phiên bản SmartFinance v1.2.0 • An toàn bảo mật"
-                        android:textColor="#64748B"
+                        android:textColor="@color/text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
             </LinearLayout>
 
             <!-- Logout Button -->
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnLogout"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_pill_soft"
                 android:backgroundTint="#FEE2E2"
                 android:text="Đăng xuất tài khoản"
+                android:textAllCaps="false"
                 android:textColor="#B91C1C"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Phát triển bởi SmartFinance Team\nĐề tài Quản lý tài chính cá nhân"
-                android:textColor="#94A3B8"
-                android:textSize="12sp"
                 android:gravity="center"
-                android:lineSpacingExtra="4dp" />
+                android:lineSpacingExtra="4dp"
+                android:text="Phát triển bởi SmartFinance Team\nĐề tài Quản lý tài chính cá nhân"
+                android:textColor="@color/text_hint"
+                android:textSize="12sp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

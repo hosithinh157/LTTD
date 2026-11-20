@@ -10,46 +10,47 @@
         android:id="@+id/tvBudgetSheetTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="Đặt hạn mức ngân sách"
-        android:textColor="#0F172A"
+        android:textColor="@color/text_primary"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
         android:text="Chọn danh mục"
-        android:textColor="#475569"
-        android:textSize="13sp"
-        android:layout_marginBottom="6dp" />
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
 
     <Spinner
         android:id="@+id/spinnerBudgetCategory"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@drawable/bg_input_field"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_input_field" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
         android:text="Hạn mức chi tiêu (VNĐ)"
-        android:textColor="#475569"
-        android:textSize="13sp"
-        android:layout_marginBottom="6dp" />
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
 
     <EditText
         android:id="@+id/edtBudgetLimit"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/bg_input_field"
-        android:paddingHorizontal="14dp"
         android:hint="VD: 5000000"
         android:inputType="number"
-        android:textColor="#0F172A"
-        android:textSize="15sp"
-        android:layout_marginBottom="24dp" />
+        android:paddingHorizontal="14dp"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
+        android:textSize="15sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,8 +61,8 @@
             android:id="@+id/btnDeleteBudget"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_weight="1"
             android:layout_marginEnd="10dp"
+            android:layout_weight="1"
             android:backgroundTint="#FEE2E2"
             android:text="Xóa"
             android:textColor="#B91C1C"

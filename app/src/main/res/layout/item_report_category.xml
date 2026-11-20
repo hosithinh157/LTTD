@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/bg_card"
     android:orientation="vertical"
-    android:paddingVertical="12dp"
-    android:background="#FFFFFF">
+    android:paddingVertical="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:background="@drawable/bg_circle_soft"
-            android:backgroundTint="#EFF3F8"
+            android:backgroundTint="@color/border_subtle"
             android:gravity="center"
             android:text="🍴"
             android:textSize="18sp" />
@@ -29,7 +29,7 @@
             android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:text="Ăn uống"
-            android:textColor="#0F172A"
+            android:textColor="@color/text_primary"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="50.000 đ"
-                android:textColor="#0F172A"
+                android:textColor="@color/text_primary"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20.5%"
-                android:textColor="#64748B"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
@@ -63,8 +63,8 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="48dp"
+        android:layout_marginTop="10dp"
         android:max="100"
         android:progress="50"
         android:progressDrawable="@drawable/progress_report_horizontal" />
