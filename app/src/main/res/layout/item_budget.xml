@@ -19,7 +19,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:background="@drawable/bg_circle_soft"
-            android:backgroundTint="#EFF3F8"
+            android:backgroundTint="@color/border_subtle"
             android:gravity="center"
             android:text="🍴"
             android:textSize="16sp" />
@@ -31,7 +31,7 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:text="Ăn uống"
-            android:textColor="#0F172A"
+            android:textColor="@color/text_primary"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.000.000 đ"
-            android:textColor="#334155"
+            android:textColor="@color/text_body"
             android:textSize="14sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Đã tiêu: 1.500.000 đ"
-            android:textColor="#64748B"
+            android:textColor="@color/text_secondary"
             android:textSize="12sp" />
 
         <TextView

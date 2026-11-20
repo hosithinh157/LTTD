@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="Cập nhật hồ sơ"
-        android:textColor="#0F172A"
+        android:textColor="@color/text_primary"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
         android:text="Tên hiển thị"
-        android:textColor="#475569"
+        android:textColor="@color/text_secondary"
         android:textSize="13sp" />
 
     <EditText
@@ -30,7 +30,8 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/bg_input_field"
         android:paddingHorizontal="14dp"
-        android:textColor="#0F172A"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
         android:textSize="15sp" />
 
     <TextView
@@ -38,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
         android:text="Mật khẩu mới (Để trống nếu không đổi)"
-        android:textColor="#475569"
+        android:textColor="@color/text_secondary"
         android:textSize="13sp" />
 
     <EditText
@@ -50,7 +51,8 @@
         android:hint="••••••••"
         android:inputType="textPassword"
         android:paddingHorizontal="14dp"
-        android:textColor="#0F172A"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
         android:textSize="15sp" />
 
     <LinearLayout
@@ -64,9 +66,9 @@
             android:layout_height="50dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:backgroundTint="#EFF3F8"
+            android:backgroundTint="@color/bg_input"
             android:text="Hủy"
-            android:textColor="#334155" />
+            android:textColor="@color/text_body" />
 
         <Button
             android:id="@+id/btnSaveProfile"

@@ -1,9 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.SmartFinance" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!-- Đổi từ .Light.NoActionBar thành .DayNight.NoActionBar -->
+    <style name="Theme.SmartFinance" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#066843</item>
+        <item name="colorPrimaryVariant">#055235</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
     </style>
-
-    <style name="Theme.SmartFinance" parent="Base.Theme.SmartFinance" />
 </resources>

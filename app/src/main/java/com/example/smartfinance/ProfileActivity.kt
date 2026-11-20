@@ -40,9 +40,11 @@ class ProfileActivity : AppCompatActivity() {
         // Theme Mode
         val switchThemeMode = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.switchThemeMode)
         val isDark = prefs.getBoolean("THEME_DARK", false)
+        switchThemeMode.setOnCheckedChangeListener(null)
         switchThemeMode.isChecked = isDark
         switchThemeMode.text = if (isDark) "Giao diện Tối " else "Giao diện Sáng "
         switchThemeMode.setOnCheckedChangeListener { _, isChecked ->
+            if (prefs.getBoolean("THEME_DARK", false) == isChecked) return@setOnCheckedChangeListener
             prefs.edit().putBoolean("THEME_DARK", isChecked).apply()
             AppCompatDelegate.setDefaultNightMode(
                 if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO

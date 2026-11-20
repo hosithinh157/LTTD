@@ -48,12 +48,17 @@ class HistoryActivity : AppCompatActivity() {
         val filterAll = findViewById<TextView>(R.id.filterAll)
         val filterExpense = findViewById<TextView>(R.id.filterExpense)
         val filterIncome = findViewById<TextView>(R.id.filterIncome)
+        val btnBackHistory = findViewById<View>(R.id.ivBackHistory)
 
         groupAdapter = HistoryGroupAdapter(emptyList()) { selectedItem ->
             showTransactionDetailBottomSheet(selectedItem)
         }
         rvHistoryGroups.layoutManager = LinearLayoutManager(this)
         rvHistoryGroups.adapter = groupAdapter
+
+        btnBackHistory.setOnClickListener {
+            finish()
+        }
 
         // Tìm kiếm theo tên quán, danh mục hoặc số tiền
         edtSearch.addTextChangedListener(object : TextWatcher {

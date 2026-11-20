@@ -35,7 +35,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Cơm trưa"
-                android:textColor="#0F172A"
+                android:textColor="@color/text_primary"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Tiền mặt"
-                android:textColor="#64748B"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-45.000 đ"
-            android:textColor="#0F172A"
+            android:textColor="@color/text_primary"
             android:textSize="15sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -65,6 +65,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginHorizontal="14dp"
-        android:background="#EEF2F6" />
+        android:background="@color/divider_line" />
 
 </LinearLayout>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8FAFC">
+    android:background="@color/bg_screen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,12 +13,23 @@
         android:paddingHorizontal="18dp"
         android:paddingTop="14dp">
 
-        <!-- 1. Top App Bar: SmartFinance / Lịch sử -->
+        <!-- 1. Top App Bar: Nút Back + SmartFinance / Lịch sử -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivBackHistory"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginEnd="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="2dp"
+                android:src="@android:drawable/ic_media_previous"
+                app:tint="@color/text_primary" />
 
             <FrameLayout
                 android:layout_width="32dp"
@@ -38,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="SmartFinance"
-                android:textColor="#0F172A"
+                android:textColor="@color/text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -48,7 +59,7 @@
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
                 android:text="/ Lịch sử"
-                android:textColor="#475569"
+                android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
 
             <ImageView
@@ -56,14 +67,14 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="14dp"
                 android:src="@android:drawable/ic_popup_reminder"
-                app:tint="#0F172A" />
+                app:tint="@color/text_primary" />
 
             <ImageView
                 android:id="@+id/ivProfile"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:background="@drawable/bg_circle_soft"
-                android:backgroundTint="#E2E8F0"
+                android:backgroundTint="@color/border_subtle"
                 android:padding="6dp"
                 android:src="@drawable/ic_person" />
         </LinearLayout>
@@ -74,7 +85,7 @@
             android:layout_height="46dp"
             android:layout_marginTop="14dp"
             android:background="@drawable/bg_pill_soft"
-            android:backgroundTint="#FFFFFF"
+            android:backgroundTint="@color/bg_card"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="14dp">
@@ -83,7 +94,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@android:drawable/ic_menu_search"
-                app:tint="#334155" />
+                app:tint="@color/text_body" />
 
             <EditText
                 android:id="@+id/edtSearchHistory"
@@ -94,8 +105,8 @@
                 android:background="@null"
                 android:hint="Tìm theo tên quán, số tiền..."
                 android:inputType="text"
-                android:textColor="#0F172A"
-                android:textColorHint="#94A3B8"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_hint"
                 android:textSize="14sp" />
 
             <ImageView
@@ -105,7 +116,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:src="@android:drawable/ic_menu_sort_by_size"
-                app:tint="#0F172A" />
+                app:tint="@color/text_primary" />
         </LinearLayout>
 
         <!-- 3. Bộ lọc loại giao dịch (Tất cả | Chi | Thu) -->
@@ -140,7 +151,7 @@
                 android:gravity="center"
                 android:paddingHorizontal="18dp"
                 android:text="Chi"
-                android:textColor="#334155"
+                android:textColor="@color/text_body"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -155,7 +166,7 @@
                 android:gravity="center"
                 android:paddingHorizontal="18dp"
                 android:text="Thu"
-                android:textColor="#334155"
+                android:textColor="@color/text_body"
                 android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -180,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tổng chi"
-                    android:textColor="#475569"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
                 <TextView
@@ -189,7 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="-7.650.000 đ"
-                    android:textColor="#0F172A"
+                    android:textColor="@color/text_primary"
                     android:textSize="17sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -197,7 +208,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#E2E8F0" />
+                android:background="@color/border_subtle" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -210,7 +221,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tổng thu"
-                    android:textColor="#475569"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
                 <TextView

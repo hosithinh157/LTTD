@@ -3,176 +3,226 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8FAFC">
+    android:background="@color/bg_screen">
 
+    <!-- 1. Top App Bar đồng bộ với Trang chủ, Lịch sử & Ghi chép -->
     <LinearLayout
         android:id="@+id/headerBudgetBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
+        android:paddingHorizontal="18dp"
         android:paddingVertical="14dp">
 
         <ImageView
             android:id="@+id/ivBackBudget"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="8dp"
             android:clickable="true"
             android:focusable="true"
             android:padding="2dp"
             android:src="@android:drawable/ic_media_previous"
-            app:tint="#0F172A" />
+            app:tint="@color/text_primary" />
+
+        <FrameLayout
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_logo_green">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_agenda"
+                app:tint="#FFFFFF" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="SmartFinance"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="6dp"
             android:layout_weight="1"
-            android:text="Ngân sách &amp; Ví"
-            android:textColor="#0F172A"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="/ Ngân sách"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="12dp"
+            android:src="@android:drawable/ic_popup_reminder"
+            app:tint="@color/text_primary" />
 
         <ImageView
             android:id="@+id/ivProfile"
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:background="@drawable/bg_circle_soft"
-            android:backgroundTint="#E2E8F0"
+            android:backgroundTint="@color/border_subtle"
             android:padding="6dp"
             android:src="@drawable/ic_person" />
     </LinearLayout>
 
+    <!-- 2. Nội dung cuộn chính -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomNavContainer"
         android:layout_below="@+id/headerBudgetBar"
+        android:clipToPadding="false"
         android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="18dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="24dp">
 
             <!-- Phân vùng Quản lý Ví -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:letterSpacing="0.03"
                     android:text="TÀI KHOẢN / VÍ TIỀN"
-                    android:textColor="#64748B"
-                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/btnAddWallet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_pill_soft"
+                    android:backgroundTint="#DCFCE7"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="5dp"
                     android:text="+ Thêm ví"
                     android:textColor="#066843"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:paddingVertical="4dp"
-                    android:paddingStart="8dp" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvWallets"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="22dp"
+                android:nestedScrollingEnabled="false" />
 
             <!-- Phân vùng Ngân sách -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:letterSpacing="0.03"
                     android:text="NGÂN SÁCH THÁNG"
-                    android:textColor="#64748B"
-                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/btnAddBudget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_pill_soft"
+                    android:backgroundTint="#DCFCE7"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="5dp"
                     android:text="+ Đặt ngân sách"
                     android:textColor="#066843"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:paddingVertical="4dp"
-                    android:paddingStart="8dp" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Bộ chọn tháng Ngân sách -->
+            <!-- Bộ chọn tháng Ngân sách dạng thanh điều hướng cân đối -->
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_pill_soft"
-                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginBottom="14dp"
+                android:background="@drawable/bg_card_white"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:id="@+id/btnPrevBudgetMonth"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/bg_pill_soft"
                     android:clickable="true"
                     android:focusable="true"
-                    android:padding="2dp"
+                    android:padding="5dp"
                     android:src="@android:drawable/ic_media_previous"
-                    app:tint="#334155" />
+                    app:tint="@color/text_body" />
 
                 <TextView
                     android:id="@+id/tvBudgetMonth"
-                    android:layout_width="110dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="Tháng 11/2026"
-                    android:textColor="#0F172A"
-                    android:textSize="13sp"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/btnNextBudgetMonth"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/bg_pill_soft"
                     android:clickable="true"
                     android:focusable="true"
-                    android:padding="2dp"
+                    android:padding="5dp"
                     android:src="@android:drawable/ic_media_next"
-                    app:tint="#334155" />
+                    app:tint="@color/text_body" />
             </LinearLayout>
 
+            <!-- Trạng thái trống khi chưa có ngân sách -->
             <TextView
                 android:id="@+id/tvEmptyBudget"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Chưa có hạn mức ngân sách nào trong tháng này."
-                android:textColor="#94A3B8"
-                android:textSize="13sp"
+                android:background="@drawable/bg_card_white"
                 android:gravity="center"
-                android:padding="20dp"
+                android:padding="24dp"
+                android:text="Chưa có hạn mức ngân sách nào trong tháng này."
+                android:textColor="@color/text_hint"
+                android:textSize="13sp"
                 android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -183,6 +233,7 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <!-- 3. Thanh điều hướng đáy dùng chung của nhóm -->
     <include layout="@layout/layout_bottom_nav" />
 
 </RelativeLayout>
