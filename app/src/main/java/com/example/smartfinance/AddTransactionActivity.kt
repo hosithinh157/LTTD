@@ -1,24 +1,35 @@
 package com.example.smartfinance
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.speech.RecognizerIntent
+import android.view.View
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.smartfinance.database.AppDatabase
 import com.example.smartfinance.models.Category
 import com.example.smartfinance.models.Transaction
 import com.example.smartfinance.models.Wallet
+import com.example.smartfinance.utils.VoiceTransactionParser
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
+
 class AddTransactionActivity : AppCompatActivity() {
 
     private var transactionType = "EXPENSE"
@@ -28,6 +39,70 @@ class AddTransactionActivity : AppCompatActivity() {
     private var selectedTime = ""
     private var expenseAmountDraft = ""
     private var incomeAmountDraft = ""
+
+    // Callback cập nhật giao diện sau khi bóc tách giọng nói
+    private var onVoiceParsedCallback: ((String) -> Unit)? = null
+
+    private val voiceLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val matches = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            val spokenText = matches?.firstOrNull() ?: return@registerForActivityResult
+            onVoiceParsedCallback?.invoke(spokenText)
+        }
+    }
+
+    private val requestMicPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            launchSpeechIntent()
+        } else {
+            showVoiceFallbackDialog()
+        }
+    }
+
+    private fun startVoiceRecognition() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            launchSpeechIntent()
+        } else {
+            requestMicPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+        }
+    }
+
+    private fun launchSpeechIntent() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "vi-VN")
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Nói ví dụ: Ăn bún đậu 45 nghìn")
+        }
+        try {
+            voiceLauncher.launch(intent)
+        } catch (e: ActivityNotFoundException) {
+            showVoiceFallbackDialog()
+        }
+    }
+
+    private fun showVoiceFallbackDialog() {
+        val input = EditText(this).apply {
+            hint = "VD: Ăn bún đậu 45k hoặc Nhận lương 5 triệu"
+        }
+        AlertDialog.Builder(this)
+            .setTitle("Nhập nhanh bằng giọng nói / câu lệnh")
+            .setMessage("Bấm Micro trên bàn phím để nói hoặc nhập câu lệnh:")
+            .setView(input)
+            .setPositiveButton("Xác nhận") { _, _ ->
+                val text = input.text.toString().trim()
+                if (text.isNotEmpty()) {
+                    onVoiceParsedCallback?.invoke(text)
+                }
+            }
+            .setNegativeButton("Hủy", null)
+            .show()
+    }
 
     // Bộ gợi ý chi tiết cho từng danh mục
     private val subNotesMap = mapOf(
@@ -65,8 +140,8 @@ class AddTransactionActivity : AppCompatActivity() {
         val edtNote = findViewById<EditText>(R.id.edtTransactionNote)
         val chipGroupSubNotes = findViewById<ChipGroup>(R.id.chipGroupSubNotes)
         val btnSave = findViewById<Button>(R.id.btnSaveTransaction)
+        val btnVoiceInput = findViewById<View>(R.id.btnVoiceInput)
 
-        // Mặc định ô số tiền rỗng (hiển thị hint 0)
         edtAmount.setText("")
 
         val now = Calendar.getInstance()
@@ -76,7 +151,6 @@ class AddTransactionActivity : AppCompatActivity() {
 
         ivBack.setOnClickListener { finish() }
 
-        // Hàm cập nhật dải thẻ chi tiết (Chips) bên dưới ô ghi chú
         fun renderSubNoteChips(categoryName: String) {
             chipGroupSubNotes.removeAllViews()
             val suggestions = subNotesMap[categoryName] ?: emptyList()
@@ -92,7 +166,6 @@ class AddTransactionActivity : AppCompatActivity() {
                     setEnsureMinTouchTargetSize(false)
                     chipMinHeight = 34f * resources.displayMetrics.density
 
-                    // Màu nền & chữ thay đổi tự động khi được chọn / chưa chọn
                     val states = arrayOf(
                         intArrayOf(android.R.attr.state_checked),
                         intArrayOf(-android.R.attr.state_checked)
@@ -117,7 +190,6 @@ class AddTransactionActivity : AppCompatActivity() {
             }
         }
 
-        // Khởi tạo gợi ý cho mục mặc định ("Ăn uống")
         edtNote.setText(selectedCategoryName)
         renderSubNoteChips(selectedCategoryName)
 
@@ -156,57 +228,38 @@ class AddTransactionActivity : AppCompatActivity() {
                 }
             }
             selectedCategoryName = categoryNames[index].text.toString()
-            // Tự động điền tên danh mục vào ô ghi chú và hiện dải gợi ý chi tiết
             edtNote.setText(selectedCategoryName)
             edtNote.setSelection(edtNote.text.length)
             renderSubNoteChips(selectedCategoryName)
         }
 
-        fun bindCategoryGrid(items: List<Pair<String, String>>) {
+        fun bindCategoryGrid(items: List<Pair<String, String>>, defaultIndex: Int = 0) {
             for (i in items.indices) {
                 categoryIcons[i].text = items[i].first
                 categoryNames[i].text = items[i].second
             }
-            selectCategoryAt(0)
-        }
-
-        tabExpense.setOnClickListener {
-            transactionType = "EXPENSE"
-            tabExpense.setBackgroundResource(R.drawable.bg_pill_expense)
-            tabExpense.setTextColor(Color.WHITE)
-            tabIncome.background = null
-            tabIncome.setTextColor(Color.parseColor("#475569"))
-            tvAmountSign.text = "- "
-            tvAmountSign.setTextColor(Color.parseColor("#B91C1C"))
-            bindCategoryGrid(expenseCats)
-        }
-
-        tabIncome.setOnClickListener {
-            transactionType = "INCOME"
-            tabIncome.setBackgroundResource(R.drawable.bg_pill_income)
-            tabIncome.setTextColor(Color.WHITE)
-            tabExpense.background = null
-            tabExpense.setTextColor(Color.parseColor("#475569"))
-            tvAmountSign.text = "+ "
-            tvAmountSign.setTextColor(Color.parseColor("#066843"))
-            bindCategoryGrid(incomeCats)
+            selectCategoryAt(defaultIndex)
         }
 
         catCards.forEachIndexed { index, card ->
             card.setOnClickListener { selectCategoryAt(index) }
         }
 
-        // Nút cộng nhanh (+10k, +50k, +100k, +500k)
         fun addQuickAmount(delta: Long) {
             val current = edtAmount.text.toString().toLongOrNull() ?: 0L
             val next = current + delta
             edtAmount.setText(next.toString())
             edtAmount.setSelection(edtAmount.text.length)
         }
-        findViewById<TextView>(R.id.btnAdd10k).setOnClickListener { addQuickAmount(10_000) }
-        findViewById<TextView>(R.id.btnAdd50k).setOnClickListener { addQuickAmount(50_000) }
-        findViewById<TextView>(R.id.btnAdd100k).setOnClickListener { addQuickAmount(100_000) }
-        findViewById<TextView>(R.id.btnAdd500k).setOnClickListener { addQuickAmount(500_000) }
+        val btnAdd10k = findViewById<TextView>(R.id.btnAdd10k)
+        val btnAdd50k = findViewById<TextView>(R.id.btnAdd50k)
+        val btnAdd100k = findViewById<TextView>(R.id.btnAdd100k)
+        val btnAdd500k = findViewById<TextView>(R.id.btnAdd500k)
+
+        btnAdd10k.setOnClickListener { addQuickAmount(10_000) }
+        btnAdd50k.setOnClickListener { addQuickAmount(50_000) }
+        btnAdd100k.setOnClickListener { addQuickAmount(100_000) }
+        btnAdd500k.setOnClickListener { addQuickAmount(500_000) }
 
         ivBackspace.setOnClickListener {
             val text = edtAmount.text.toString()
@@ -216,17 +269,9 @@ class AddTransactionActivity : AppCompatActivity() {
             }
         }
 
-        // 1. Ánh xạ 4 nút nhanh
-        val btnAdd10k = findViewById<TextView>(R.id.btnAdd10k)
-        val btnAdd50k = findViewById<TextView>(R.id.btnAdd50k)
-        val btnAdd100k = findViewById<TextView>(R.id.btnAdd100k)
-        val btnAdd500k = findViewById<TextView>(R.id.btnAdd500k)
-
-        // 2. Hàm đổi dấu & màu cho 4 nút nhanh theo loại giao dịch
         fun updateQuickAmountChips(isExpense: Boolean) {
             val sign = if (isExpense) "-" else "+"
             val textColor = Color.parseColor(if (isExpense) "#B91C1C" else "#066843")
-
             val buttons = listOf(
                 btnAdd10k to "10k",
                 btnAdd50k to "50k",
@@ -239,17 +284,13 @@ class AddTransactionActivity : AppCompatActivity() {
             }
         }
 
-// Khởi tạo trạng thái mặc định (Chi tiêu -> dấu -)
         updateQuickAmountChips(isExpense = true)
 
-// 3. Gọi lại trong sự kiện chuyển tab Chi tiêu / Thu tiền
-        tabExpense.setOnClickListener {
-            if (transactionType == "EXPENSE") return@setOnClickListener
-
-            // Lưu lại số tiền đang nhập dở bên Thu tiền trước khi rời đi
-            incomeAmountDraft = edtAmount.text.toString()
-
-            // Chuyển sang Chi tiêu và nạp số tiền riêng của Chi tiêu (mặc định rỗng = 0)
+        fun switchToExpenseTab(forceUpdate: Boolean = false) {
+            if (!forceUpdate && transactionType == "EXPENSE") return
+            if (transactionType == "INCOME") {
+                incomeAmountDraft = edtAmount.text.toString()
+            }
             transactionType = "EXPENSE"
             edtAmount.setText(expenseAmountDraft)
             edtAmount.setSelection(edtAmount.text.length)
@@ -264,13 +305,11 @@ class AddTransactionActivity : AppCompatActivity() {
             bindCategoryGrid(expenseCats)
         }
 
-        tabIncome.setOnClickListener {
-            if (transactionType == "INCOME") return@setOnClickListener
-
-            // Lưu lại số tiền đang nhập dở bên Chi tiêu trước khi rời đi
-            expenseAmountDraft = edtAmount.text.toString()
-
-            // Chuyển sang Thu tiền và nạp số tiền riêng của Thu tiền (mặc định rỗng = 0)
+        fun switchToIncomeTab(forceUpdate: Boolean = false) {
+            if (!forceUpdate && transactionType == "INCOME") return
+            if (transactionType == "EXPENSE") {
+                expenseAmountDraft = edtAmount.text.toString()
+            }
             transactionType = "INCOME"
             edtAmount.setText(incomeAmountDraft)
             edtAmount.setSelection(edtAmount.text.length)
@@ -283,6 +322,52 @@ class AddTransactionActivity : AppCompatActivity() {
             tvAmountSign.setTextColor(Color.parseColor("#066843"))
             updateQuickAmountChips(isExpense = false)
             bindCategoryGrid(incomeCats)
+        }
+
+        tabExpense.setOnClickListener { switchToExpenseTab() }
+        tabIncome.setOnClickListener { switchToIncomeTab() }
+
+        // Tự động điền toàn bộ giao diện khi nhận diện được giọng nói
+        onVoiceParsedCallback = { spokenText ->
+            val parsed = VoiceTransactionParser.parse(spokenText)
+            val amountStr = if (parsed.amount > 0) parsed.amount.toLong().toString() else ""
+
+            // Chuẩn hóa tên danh mục khớp với danh sách trên màn hình
+            val normalizedCategory = when (parsed.categoryKeyword) {
+                "Di chuyển" -> "Đi lại"
+                "Lương" -> "Tiền lương"
+                else -> parsed.categoryKeyword
+            }
+
+            if (parsed.isIncome) {
+                incomeAmountDraft = amountStr
+                switchToIncomeTab(forceUpdate = true)
+                val idx = incomeCats.indexOfFirst { it.second.equals(normalizedCategory, ignoreCase = true) }
+                if (idx >= 0) selectCategoryAt(idx)
+            } else {
+                expenseAmountDraft = amountStr
+                switchToExpenseTab(forceUpdate = true)
+                val idx = expenseCats.indexOfFirst { it.second.equals(normalizedCategory, ignoreCase = true) }
+                if (idx >= 0) selectCategoryAt(idx)
+            }
+
+            if (amountStr.isNotEmpty()) {
+                edtAmount.setText(amountStr)
+                edtAmount.setSelection(edtAmount.text.length)
+            }
+            edtNote.setText(parsed.note)
+            edtNote.setSelection(edtNote.text.length)
+
+            Toast.makeText(
+                this,
+                "Đã điền: ${parsed.note} (${selectedCategoryName})",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        // Gắn sự kiện cho nút Micro (nằm ngoài btnSave)
+        btnVoiceInput?.setOnClickListener {
+            startVoiceRecognition()
         }
 
         // Chọn nguồn ví
